@@ -13,8 +13,6 @@ public class main {
 		
 		Scanner sc = new Scanner(System.in);
 		
-		
-		
 		while(check != false)
 		{
 			System.out.println("옵션 선택");
@@ -40,7 +38,16 @@ public class main {
 				case 5 :
 					dao.subject_print();
 					break;
-				case 6 :
+				case 6:
+					dao.changeScore(sc);
+					break;
+				case 7 :
+					dao.saveToFile();
+					break;
+				case 8 :
+					dao.LoadToFile();
+					break;
+				case 9 :
 					check = false;
 					break;
 			}

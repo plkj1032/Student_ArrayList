@@ -13,7 +13,7 @@ public class StudentDAO {
 	
 	public void menu_list()
 	{
-		String menu[] = {"학생 추가","학생 정보","과목 추가","종료"};
+		String menu[] = {"학생 추가","학생 정보","학생 정보 변경","과목 추가","과목 수 출력","종료"};
 		
 		for(int i = 0; i < menu.length; i++)
 		{
@@ -61,8 +61,8 @@ public class StudentDAO {
 			if(students.get(i).getSubject() == null ||
 					students.get(i).getSubject().isEmpty())
 			{
-				System.out.println("과목을 먼저 입력해주세요!");
-				return;
+				System.out.println("등록된 과목이 없습니다.");
+				continue;
 			}
 			
 			for( int j = 0; j < students.get(i).getSubject().size(); j++)
@@ -78,31 +78,25 @@ public class StudentDAO {
 		System.out.print("학생 이름 입력 : ");
 		String name = sc.nextLine();
 		
-		//StudentDTO target = null;
-		
-		boolean found = false;
+		StudentDTO target = null;
 		
 		for(StudentDTO s : students)
 		{
 			if(s.getName().equals(name))
 			{
-				found = true;
-				//target = s;
+				target = s;
 				break;
 			}
-			
-			if(!found)
-			{
-				System.out.println("등록되지 않은 학생입니다!");
-				return;
-			}
+		}
+		
+		if(target == null)
+		{
+			System.out.println("등록되지 않은 학생입니다!");
+			return;
 		}
 		
 		System.out.print("과목 수 입력 : ");
 		int sub_num = check_num(sc);
-		
-		
-		//System.out.println("과목 : " + sub_name + "점수 : " + sub_score);
 		
 		for(int i = 0; i < students.size(); i++)
 		{
@@ -121,13 +115,66 @@ public class StudentDAO {
 					subject.setSub_score(sub_score);
 					
 					students.get(i).getSubject().add(subject);
-	//				students.get(i).getSubject().get(i).setSub_name(sub_name);
-	//				students.get(i).getSubject().get(i).setSub_score(sub_score);
 					
-					System.out.println("과목 등록 완료!");
+					//System.out.println("과목 등록 완료!");
 				}
 			}
 		}
+		
+	}
+	public void editStuInfo(Scanner sc)
+	{
+		System.out.print("변경할려는 학생 이름 : ");
+		String name = sc.nextLine();
+		
+		StudentDTO target = null;
+		
+		for(StudentDTO s : students)
+		{
+			if(s.getName().equals(name))
+			{
+				target = s;
+			}
+		}
+		
+		if(target == null)
+		{
+			System.out.println("등록되지 않은 학생!");
+			return;
+		}
+		
+		System.out.print("정보 변경 1번. 이름, 2번. 나이 : ");
+		int opt = check_num(sc);
+		
+		switch(opt)
+		{
+			case 1:
+				System.out.print("변경할 이름 : ");
+				String new_name = sc.nextLine();
+				
+				target.setName(new_name);
+				break;
+			case 2:
+				System.out.println("변경할 나이 : ");
+				int new_age = check_num(sc);
+				
+				target.setAge(new_age);
+				break;
+		}
+	}
+	
+	public void subject_print()
+	{
+		for(int i=0; i< students.size(); i++)
+		{
+			System.out.println((i+1) + "번째 과목 수 : " + students.get(i).getSubject().size());		
+		}
+			
+	}
+	
+	
+	public void deleteSt()
+	{
 		
 	}
 }

@@ -32,9 +32,15 @@ public class main {
 					dao.printInfo();
 					break;
 				case 3 :
-					dao.insertSub();
+					dao.editStuInfo(sc);
 					break;
 				case 4 :
+					dao.insertSub();
+					break;
+				case 5 :
+					dao.subject_print();
+					break;
+				case 6 :
 					check = false;
 					break;
 			}

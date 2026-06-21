@@ -41,13 +41,25 @@ public class main {
 				case 6:
 					dao.changeScore(sc);
 					break;
-				case 7 :
+				case 7:
+					dao.deleteSubject(sc);
+					break;
+				case 8:
+					dao.sub_avg_score(sc);
+					break;
+				case 9:
+					dao.all_stu_avg();
+					break;
+				case 10:
+					dao.each_sub_avg(sc);
+					break;
+				case 11 :
 					dao.saveToFile();
 					break;
-				case 8 :
+				case 12 :
 					dao.LoadToFile();
 					break;
-				case 9 :
+				case 13 :
 					check = false;
 					break;
 			}

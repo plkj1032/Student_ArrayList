@@ -18,7 +18,9 @@ public class StudentDAO {
 	public void menu_list()
 	{
 		String menu[] = {"학생 추가","학생 정보","학생 정보 변경",
-				"과목 추가","과목 수 출력","점수 변경","파일저장","파일로드","종료"};
+				"과목 추가","과목 수 출력","점수 변경","과목삭제",
+				"학생 평균","학생별 평균","특정 과목 평균",
+				"파일저장","파일로드","종료"};
 		
 		for(int i = 0; i < menu.length; i++)
 		{
@@ -134,13 +136,25 @@ public class StudentDAO {
 		
 		StudentDTO target = null;
 		
-		for(StudentDTO s : students)
-		{
-			if(s.getName().equals(name))
+		int idx = 0;
+		
+		for( int i = 0; i < students.size(); i++ )
+		{			
+			if(name.equals(students.get(i).getName()))
 			{
-				target = s;
+				idx = i;
+				target = students.get(i);
+				break;
 			}
 		}
+		
+//		for(StudentDTO s : students)
+//		{
+//			if(s.getName().equals(name))
+//			{
+//				target = s;
+//			}
+//		}
 		
 		if(target == null)
 		{
@@ -148,7 +162,7 @@ public class StudentDAO {
 			return;
 		}
 		
-		System.out.print("정보 변경 1번. 이름, 2번. 나이 : ");
+		System.out.print("정보 변경 1번. 이름, 2번. 나이, 3번. 삭제 : ");
 		int opt = check_num(sc);
 		
 		switch(opt)
@@ -165,6 +179,9 @@ public class StudentDAO {
 				
 				target.setAge(new_age);
 				break;
+			case 3:
+				students.remove(idx);
+				System.out.println("삭제 완료!");
 		}
 	}
 	
@@ -230,6 +247,165 @@ public class StudentDAO {
 		
 		targetSub.setSub_score(sub_score);
 	}
+	
+	public void deleteSubject(Scanner sc)
+	{
+		System.out.print("학생 이름 입력 : ");
+		String name = sc.nextLine();
+		
+		boolean sub_found = false;
+		
+		int idx = 0;
+		int sdx = 0;
+		
+		StudentDTO target = new StudentDTO();
+		
+		for(int i = 0; i < students.size(); i++)
+		{
+			if(name.equals(students.get(i).getName()))
+			{
+				idx = i;
+				target = students.get(i);
+			}
+		}
+		
+		if(target == null)
+		{
+			System.out.println("등록되지 않은 학생입니다.");
+			return;
+		}
+		
+		System.out.println("과목 목록 : ");
+		for(SubjectDTO sub : target.getSubject())
+		{
+			System.out.print(sub.getSub_name() + "\t");
+		}
+		
+		System.out.print("\n삭제할 과목 선택 : ");
+		String sub_name = sc.nextLine();
+		
+		for(int i = 0; i < target.getSubject().size(); i++)
+		{
+			if(sub_name.equals(target.getSubject().get(i).getSub_name()))
+			{
+				sub_found = true;
+				sdx = i;
+				break;
+			}
+		}
+		
+		if(!sub_found)
+		{
+			System.out.println("등록된 과목만 선택하세요!");
+			return;
+		}
+		
+		target.getSubject().remove(sdx);
+	}
+	
+	public void sub_avg_score(Scanner sc)
+	{
+		System.out.print("학생 이름 입력 : ");
+		String name = sc.nextLine();
+		
+		int sum = 0;
+		
+		StudentDTO target = new StudentDTO();
+		
+		for(StudentDTO s : students)
+		{
+			if(name.equals(s.getName()))
+			{
+				target = s;
+			}
+		}
+		
+		if(target == null)
+		{
+			System.out.println("등록되지 않은 학생!");
+			return;
+		}
+		
+		for(SubjectDTO sub : target.getSubject())
+		{
+			sum += sub.getSub_score();
+		}
+		
+		double avg = sum / target.getSubject().size();
+		
+		System.out.println(target.getName() + "학생의 평균 : " + avg); 
+	}
+	
+	public void all_stu_avg()
+	{
+		for(StudentDTO s : students)
+		{
+			int sum = 0;
+			
+			for(SubjectDTO sub : s.getSubject())
+			{
+				sum += sub.getSub_score();
+			}
+			
+			double avg = sum / students.size();
+			
+			System.out.println(s.getName() + "의 평균 : " + avg);
+		}	
+	}
+	
+	public void each_sub_avg(Scanner sc)
+	{
+		ArrayList<String> sub_list = new ArrayList<>();
+		
+		System.out.print("과목 정보 : ");
+		for(StudentDTO s : students)
+		{
+			for(SubjectDTO sub : s.getSubject())
+			{
+				if(!sub_list.contains(sub.getSub_name()))
+				{
+					sub_list.add(sub.getSub_name());
+				}
+			}
+		}
+		
+		for(String s : sub_list)
+		{
+			System.out.print(s + "\t");
+		}
+		
+		System.out.println();
+		
+		System.out.print("과목 입력 : ");
+		String sub_name = sc.nextLine();
+		
+		int sum = 0;
+		int count = 0;
+		double avg = 0;
+		
+		for(StudentDTO s : students)
+		{
+			for(SubjectDTO sub : s.getSubject())
+			{
+				if(sub_name.equals(sub.getSub_name()))
+				{
+					sum += sub.getSub_score();
+					count++;
+				}
+			}
+		}
+		
+		if(count == 0)
+		{
+			System.err.println("등록되지 않은 과목입니다!");
+			return;
+		}
+		
+		avg = sum / count;
+		
+		System.out.println(sub_name + "의 평균은 : " + avg);
+	}
+	
 	
 	public void saveToFile()
 	{

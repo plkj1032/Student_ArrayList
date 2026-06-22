@@ -19,7 +19,7 @@ public class StudentDAO {
 	{
 		String menu[] = {"학생 추가","학생 정보","학생 정보 변경",
 				"과목 추가","과목 수 출력","점수 변경","과목삭제",
-				"학생 평균","학생별 평균","특정 과목 평균",
+				"학생 평균","학생별 평균","특정 과목 평균","총점 랭킹",
 				"파일저장","파일로드","종료"};
 		
 		for(int i = 0; i < menu.length; i++)
@@ -404,6 +404,44 @@ public class StudentDAO {
 		avg = sum / count;
 		
 		System.out.println(sub_name + "의 평균은 : " + avg);
+	}
+	
+	public int getTotalScore(StudentDTO st)
+	{
+		int sum = 0;
+		
+		for(SubjectDTO sub : st.getSubject())
+		{
+			sum += sub.getSub_score();
+		}
+		
+		return sum;
+	}
+	
+	public void sum_score_rank()
+	{
+		for(int i = 0; i < students.size() - 1; i++)
+		{
+			for(int j = i + 1; j < students.size(); j++)
+			{
+				if(getTotalScore(students.get(i)) 
+						< getTotalScore(students.get(j)))
+				{
+					StudentDTO tmp = students.get(i);
+					students.set(i,students.get(j));
+					students.set(j, tmp);
+				}
+			}
+		}
+		
+		for(int i = 0; i < students.size(); i++)
+		{
+			System.out.println((i + 1) + "등 "
+	                + students.get(i).getName()
+	                + " 총점 : "
+	                + getTotalScore(students.get(i)));
+		}
+		
 	}
 	
 	

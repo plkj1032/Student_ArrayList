@@ -53,13 +53,16 @@ public class main {
 				case 10:
 					dao.each_sub_avg(sc);
 					break;
-				case 11 :
-					dao.saveToFile();
+				case 11:
+					dao.sum_score_rank();
 					break;
 				case 12 :
-					dao.LoadToFile();
+					dao.saveToFile();
 					break;
 				case 13 :
+					dao.LoadToFile();
+					break;
+				case 14 :
 					check = false;
 					break;
 			}
